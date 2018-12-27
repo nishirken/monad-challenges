@@ -59,3 +59,18 @@ generalPair2 fstGen sndGen f seed = (f x y, sndSeed)
   where
     (x, fstSeed) = fstGen seed
     (y, sndSeed) = sndGen fstSeed
+
+repRandom :: [Gen a] -> Gen [a]
+repRandom [] seed = ([], seed)
+repRandom (f:fs) seed = (map fst acc, snd $ last acc)
+  where
+    last xs = xs !! (length xs - 1)
+    acc = foldr (\g acc -> acc ++ [g (snd (last acc))]) [f seed] fs
+
+genTwo :: Gen a -> (a -> Gen b) -> Gen b
+genTwo fstGen f seed = f res newSeed
+  where
+    (res, newSeed) = fstGen seed
+
+mkGen :: a -> Gen a
+mkGen x seed = (x, seed)
