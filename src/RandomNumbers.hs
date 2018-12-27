@@ -2,8 +2,10 @@ module RandomNumbers where
 
 import Prelude (undefined)
 import MCPrelude
+import Common
 
 type Gen a = Seed -> (a, Seed)
+newtype Gen' a = { evalGen :: Seed -> (a, Seed) }
 
 fiveRands :: [Integer]
 fiveRands = [first, second, third, fourth, fifth]
